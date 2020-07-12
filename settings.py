@@ -1,0 +1,35 @@
+import glob
+import sys
+
+try:
+    sys.path.append(glob.glob('../../carla/dist/carla-0.9.9-py3.7-linux-x86_64.egg')[0])
+except IndexError:
+    pass
+
+import carla
+
+SHOW_PREVIEW = False
+IM_WIDTH = 640
+IM_HEIGHT = 480
+SECONDS_PER_EPISODE = 10
+REPLAY_MEMORY_SIZE = 5_000
+MIN_REPLAY_MEMORY_SIZE = 1_000
+MINIBATCH_SIZE = 16
+PREDICTION_BATCH_SIZE = 1
+TRAINING_BATCH_SIZE = MINIBATCH_SIZE // 4
+UPDATE_TARGET_EVERY = 5
+MODEL_NAME = "Xception"
+
+MEMORY_FRACTION = 0.5
+MIN_REWARD = -200
+
+EPISODES = 100
+
+DISCOUNT = 0.99
+epsilon = 1
+EPSILON_DECAY = 0.95 ## 0.9975 99975
+MIN_EPSILON = 0.001
+
+AGGREGATE_STATS_EVERY = 10
+
+FPS = 60

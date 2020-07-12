@@ -127,3 +127,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+
+delete.py
+doubleDQN_Lunar_Lander.py
+models/
+tmp/
