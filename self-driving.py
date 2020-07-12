@@ -74,6 +74,7 @@ if __name__ == '__main__':
         eps_history.append(agent.epsilon)
 
         avg_score = np.mean(scores[-10:])
+        print("agent.learn_step_counter: ",agent.learn_step_counter)
 
         print('episode', episode, 'score %.2f' % score, 'average score %.2f' % avg_score, 'epsilon %.2f' %agent.epsilon)
         if episode%20 and avg_score > best_score:

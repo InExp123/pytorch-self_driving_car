@@ -84,7 +84,7 @@ class CarEnv:
         if len(self.collision_hist) != 0:
             done = True
             reward = -200
-        elif kmh < 50:
+        elif kmh < 35:
             done = False
             reward = -1
         else:

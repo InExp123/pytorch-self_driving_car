@@ -71,7 +71,9 @@ class DeepQNetwork(nn.Module):
 
 
 
-# model = DeepQNetwork(0.0001, 3, "test", "test")
-# x = T.randn(1, 3, 640, 480)
-# # summary(model, (3, 640, 480))
-# print(model.forward(x).detach().cpu().numpy())
+model = DeepQNetwork(0.0001, 3, "test", "test")
+x = T.randn(3, 640, 480)
+x = np.expand_dims(x, axis=0)
+print(x.shape)
+# summary(model, (3, 640, 480))
+print(model.forward(x).detach().cpu().numpy())

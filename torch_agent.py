@@ -5,7 +5,7 @@ import sys
 from DQnet import DeepQNetwork
 from buffer import Replay_mem
 dtype = T.cuda.FloatTensor if T.cuda.is_available() else T.FloatTensor
-from settings import IM_HEIGHT, IM_WIDTH, FPS
+from settings import IM_HEIGHT, IM_WIDTH, FPS, MIN_REPLAY_MEMORY_SIZE
 import time
 
 T.manual_seed(0)
@@ -44,7 +44,7 @@ class Agent():
             time.sleep(1/FPS)
 
         else:
-            actions = self.Q_local.forward(observation)
+            actions = self.Q_local.forward(np.expand_dims(observation, axis=0))
             action = T.argmax(actions).item()
 
         return action
@@ -57,9 +57,9 @@ class Agent():
         self.epsilon = self.epsilon - self.eps_dec if self.epsilon > self.eps_min else self.eps_min
 
     def learn(self):
-        if self.replay_mem.mem_cntr < self.replay_mem.mem_size:
-            # if (self.replay_mem.mem_cntr%100 ==0):
-            #     print(self.replay_mem.mem_cntr)
+        if self.replay_mem.mem_cntr < MIN_REPLAY_MEMORY_SIZE:
+            if (self.replay_mem.mem_cntr%100 ==0):
+                print(self.replay_mem.mem_cntr)
             return
         self.Q_local.optimizer.zero_grad()
         self.replace_target_network()
@@ -94,11 +94,13 @@ class Agent():
         self.Q_local.optimizer.step()
         
         self.learn_step_counter += 1
+        # print("self.learn_step_counter: ",self.learn_step_counter)
         self.reduce_eps()
 
     def train_in_loop(self):
         x = np.random.uniform(size=(1, 3, IM_HEIGHT, IM_WIDTH)).astype(np.float32)
-        # y = np.random.uniform(size=(1, 3)).astype(np.float32)
+        y = np.random.uniform(size=(1, 3)).astype(np.float32)
+        self.Q_local.optimizer.zero_grad()
 
         q_eval = self.Q_local.forward(x).detach().cpu().numpy()
         
