@@ -133,3 +133,4 @@ delete.py
 doubleDQN_Lunar_Lander.py
 models/
 tmp/
+plots/

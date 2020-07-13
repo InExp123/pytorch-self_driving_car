@@ -25,7 +25,9 @@ class CarEnv:
         self.actor_list = []
 
         self.transform = random.choice(self.world.get_map().get_spawn_points())
-        self.vehicle = self.world.spawn_actor(self.model_3, self.transform)
+        self.vehicle = self.world.spawn_actor(self.model_3, self.transform) 
+        # map = self.world.get_map()
+        # self.vehicle = self.world.spawn_actor(self.model_3, map.get_waypoint(self.transform.location).transform)
         self.actor_list.append(self.vehicle)
 
         self.rgb_cam = self.blueprint_library.find('sensor.camera.rgb')

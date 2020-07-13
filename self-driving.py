@@ -25,9 +25,9 @@ if __name__ == '__main__':
 
     agent = Agent(gamma=DISCOUNT, epsilon=1.0, lr=0.0007, input_dims=[3, 480, 640], batch_size=4,\
                   n_actions=3, esp_end = 0.01, rl_algo ='DDQN', \
-                  save_targ_net = 10, env_name = 'Carla0_9_9', max_mem_size=5000) #max_mem_size
+                  save_targ_net = 10, env_name = 'Carla0_9_9', max_mem_size=3000) #max_mem_size
     best_score = -np.inf
-    resume_training = False
+    resume_training = True
     inference = False
 
     if resume_training or inference:
@@ -42,7 +42,7 @@ if __name__ == '__main__':
     # _ = agent.Q_local.forward(np.ones((3, env.im_height, env.im_width)))
 
     scores, eps_history = [], []
-    n_games = 200 #2500
+    n_games = 100 #2500
     # sys.exit("Exit from here")
 
     fname = agent.rl_algo + '_' + agent.env_name + '_lr' + str(agent.lr) +'_' \
@@ -55,7 +55,7 @@ if __name__ == '__main__':
         done  = False
         observation = env.reset()
 
-        print("Starting episode: ",episode)
+        # print("Starting episode: ",episode)
         
         while not done:
             action = agent.choose_actions(observation)
@@ -77,7 +77,7 @@ if __name__ == '__main__':
         print("agent.learn_step_counter: ",agent.learn_step_counter)
 
         print('episode', episode, 'score %.2f' % score, 'average score %.2f' % avg_score, 'epsilon %.2f' %agent.epsilon)
-        if episode%20 and avg_score > best_score:
+        if episode%5 and avg_score > best_score:
             if not inference:
                agent.save_models()
             best_score = avg_score
@@ -85,3 +85,7 @@ if __name__ == '__main__':
     # plot_running_avg(scores, 'single_DQN500.jpg')
     plot_learning_curve(scores, eps_history, figure_file)
     print('best_score: ', best_score)
+
+    agent.stop = True
+    trainer_thread.join()
+    agent.save_models()
